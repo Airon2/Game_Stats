@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background-color: #222; color: #fff; padding: 20px; border-radius: 8px;">
+    <h2 style="text-align: center;">Регистрация</h2>
+    <form method="post" enctype="multipart/form-data" style="margin-top: 20px;">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div style="color: red; margin-bottom: 15px;">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div style="margin-bottom: 15px;">
+            <label for="id_username" style="display: block; color: #ffa500;">Имя пользователя:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div style="color: red;">
+                    {% for error in form.username.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label for="id_email" style="display: block; color: #ffa500;">Email:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div style="color: red;">
+                    {% for error in form.email.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label for="id_password1" style="display: block; color: #ffa500;">Пароль:</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <div style="color: red;">
+                    {% for error in form.password1.errors %}
+                        {% if 'too_similar' in error %}
+                            Пароль слишком похож на другие ваши личные данные.
+                        {% elif 'at_least' in error %}
+                            Пароль должен содержать не менее 8 символов.
+                        {% elif 'common_password' in error %}
+                            Пароль не должен быть часто используемым.
+                        {% elif 'numeric' in error %}
+                            Пароль не должен состоять только из цифр.
+                        {% elif 'too_short' in error %}
+                            Пароль слишком короткий. Он должен содержать не менее 8 символов.
+                        {% elif 'too_common' in error %}
+                            Пароль слишком часто используется.
+                        {% else %}
+                            {{ error }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label for="id_password2" style="display: block; color: #ffa500;">Подтвердите пароль:</label>
+            {{ form.password2 }}
+        </div>
+        
+        <button type="submit" style="background-color: #ffa500; color: #fff; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">Зарегистрироваться</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+/.env
+/games/__pycache__
+/games/migrations
+/myvenv
+/Stats/__pycache__

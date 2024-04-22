@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Game</title>
+    <style>
+        body {
+            background-color: #222; /* Цвет фона темной темы */
+            color: #fff; /* Цвет текста */
+            font-family: Arial, sans-serif; /* Шрифт текста */
+            padding: 20px; /* Отступы вокруг содержимого */
+        }
+
+        h1 {
+            color: #ffa500; /* Цвет заголовка */
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            padding: 8px;
+            width: 100%;
+            margin-bottom: 15px;
+            background-color: #333;
+            border: 1px solid #777;
+            color: #fff;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #ffa500;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #ff8c00;
+        }
+    </style>
+</head>
+<body>
+    <h1>Добавить новую игру</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="title">Название Игры:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="icon">Game Icon:</label>
+        <input type="file" id="icon" name="icon" accept="image/*" required>
+
+        <label for="game_id">Game ID:</label>
+        <input type="text" id="game_id" name="game_id" required>
+
+        <input type="submit" value="Добавить Игру">
+    </form>
+</body>
+</html>

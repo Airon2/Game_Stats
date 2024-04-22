@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameStats</title>
+    <link rel="shortcut icon" href="/media/icons/favicon.ico" type="image/x-icon">
+    {% block style %}
+    {% load static %}
+    <style>
+      body {
+        background-color: #222;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+    }
+    
+    header {
+        width: 100%;
+        margin: 0;
+        background-color: rgb(30, 144, 255);
+        height: 90px;
+        display: flex;
+        align-items: center;
+    }
+    
+    header h1 {
+        margin-left: 20px;
+        color: white;
+    }
+
+    h1 {
+        color: #ffa500; /* Цвет заголовков */
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+    
+    nav a {
+        margin-right: 10px;
+        text-decoration: none;
+        color: white;
+    }
+    
+    main {
+        width: 100%;
+        margin: 0 auto;
+        background-color: rgb(55, 59, 58);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .account-content {
+        float: right;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        margin-left: 5px;
+        margin-right: 15px;
+        font-size: medium;
+        color: white;
+    }
+    
+    .account-content img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 7px;
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        margin-top: 120px;
+    }
+    
+    .dropdown-content a {
+        color: black;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+    }
+    
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    
+    .logout-btn {
+        color: black;
+        text-decoration: none;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+    }
+    
+    .logout-btn:hover {
+        background-color: #f1f1f1;
+    }
+    
+    .game-button {
+        float: left;
+        height: 50px;
+        width: 120px;
+        background-color: rgb(34, 79, 153);
+        border-radius: 15px;
+        border-color: transparent;
+        margin-top: 30px;
+        margin-left: 15px;
+        margin-right: 5px;
+        font-size: medium;
+        color: white;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+    
+    .game-button:hover {
+        background-color: rgba(34, 79, 153, 0.7);
+    }
+    /* Специфичные стили для кнопок в меню */
+    .menu-button {
+        background-color: rgb(48, 111, 213);
+        margin-left: 20px;
+        margin-top: 7px;
+        border-color: transparent;
+        color: white;
+        font-size: medium;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        border-radius: 10px;
+    }
+
+    /* Изменяем цвет кнопки при наведении */
+    .menu-button:hover {
+        background-color: rgba(34, 79, 153, 0.7);
+    }
+    </style>
+    {% endblock style %}
+</head>
+<body>
+    <header>
+        <div style="height: 128px; background-color:rgb(48, 111, 213); width: 100%;">
+            <div style="height: 89px; background-color:rgb(48, 111, 213);">
+                <a href="{% url 'home' %}" style="text-decoration: none;">
+                    <button class="game-button">Game Stats</button>
+            <div style="height: 89px; background-color:rgb(48, 111, 213);">
+                <a href="{% url 'game-detail' game_title='Squad' %}">
+                    <button class="game-button">Squad</button>
+                </a>
+                <a href="{% url 'game-detail' game_title='Counter-Strike' %}">
+                    <button class="game-button">Counter-Strike 1.6</button>
+                </a>
+                <a href="{% url 'game-detail' game_title='Counter-Strike 2' %}">
+                    <button class="game-button">CS 2</button>
+                </a>
+                <a href="{% url 'game-detail' game_title='Ready or Not' %}">
+                    <button class="game-button">Ready or Not</button>
+                </a>
+                <a href="{% url 'game-detail' game_title='DCS World Steam Edition' %}">
+                    <button class="game-button">DCS World</button>
+                </a>
+                <!-- Проверка аутентификации пользователя -->
+                {% if user.is_authenticated %}
+                <div class="dropdown account-content" style="float:right; margin-top: 20px; display: flex; align-items: center; margin-left: 5px; margin-right: 15px; font-size: medium; color:white;">
+                {% if user.profile.avatar %}
+                <a href="{% url 'profile_detail' %}">
+                    <img src="{{ user.profile.avatar.url }}" alt="User Photo" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 7px;"></a>
+                {% else %}
+                <a href="{% url 'profile_detail' %}">
+                    <img src="{% static 'default_avatar.png' %}" alt="Default User Photo" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 7px;"></a>
+                {% endif %}
+                <a href="{% url 'profile_detail' %}">
+                    <span style="color: white;">{{ user.profile.nickname }}</span></a>
+                <div class="dropdown-content">
+                    <a href="{% url 'profile_settings' %}">Настройки</a>
+                    <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <button class="logout-btn" type="submit">Выйти</button>
+                    </form>
+                </div>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}">
+                <button style="float:right; height: 50px; width: 120px; background-color:rgb(34, 79, 153); border-radius: 20px; border-color: transparent; margin-top: 20px; margin-left: 5px; margin-right: 15px; font-size: medium; color:white;">Войти</button>
+                </a>
+            {% endif %}
+    </div>
+            
+            <div style="height: 2px; background-color:rgb(255, 255, 255);"></div>
+            
+            <div style="height: 39px; background-color:rgb(48, 111, 213);">
+                <a href="{% url 'home' %}" style="text-decoration: none;">
+                    <button class="menu-button">Game Stats</button>
+                </a>
+                <button class="menu-button">Apps</button>
+                <button class="menu-button">Support</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+    <footer>
+        <!-- Контент нижней части, например, информация о копирайте -->
+    </footer>
+</body>
+</html>

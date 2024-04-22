@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ game.title }}</title>
+</head>
+<body>
+    <h1>{{ game.title }}</h1>
+    <img src="{{ game.icon.url }}" alt="{{ game.title }}" style="width: 128px; height: 128px;">
+    <p><strong>Время игры :</strong> {{ playtime_hours }}</p>
+    <p><strong>Среднее время игры (2 weeks):</strong> {{ game_stats.playtime_2weeks }}</p>
+</body>
+</html>
+{% endblock %}

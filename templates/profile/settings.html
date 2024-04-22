@@ -1,0 +1,139 @@
+<!-- profile_settings.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings</title>
+    <style>
+        form {
+            margin-top: 20px; /* Отступ сверху для формы */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffa500; /* Цвет текста меток */
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #333; /* Цвет фона полей ввода */
+            border: none;
+            color: #fff; /* Цвет текста в полях ввода */
+        }
+
+        .games-button {
+            background-color: #ffa500; /* Цвет фона кнопки */
+            color: #fff; /* Цвет текста кнопки */
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .games-button:hover {
+            background-color: #ff7c00; /* Цвет фона кнопки при наведении */
+        }
+
+        a {
+            color: #ffa500; /* Цвет ссылок */
+            text-decoration: none; /* Убираем подчеркивание ссылок */
+        }
+
+        a:hover {
+            text-decoration: underline; /* Подчеркивание ссылок при наведении */
+        }
+        .game-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .game-icon {
+            width: 60px; /* Ширина иконки игры */
+            height: 60px; /* Высота иконки игры */
+            margin-right: 10px; /* Добавляем небольшой отступ между логотипом и названием игры */
+            object-fit: cover; /
+        }
+
+        .game-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-name {
+            font-weight: bold;
+            margin: 0 0 5px 0; /* Уменьшаем нижний внутренний отступ */
+            color: #ffa500; /* Цвет названия игры */
+        }
+
+        .game-id {
+            margin: 0; /* Убираем верхний и нижний внутренний отступ */
+            color: #ccc; /* Цвет идентификатора игры */
+        }
+    </style>
+</head>
+    <div style="display: flex;">
+
+        <!-- Левая боковая панель с меню -->
+        <div style="margin-right: 20px; margin-top: 22px; width: 200px; background-color: #333; color: #fff; padding: 20px;">
+            <h3>Меню</h3>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li><a href="{% url 'profile_detail' %}">Профиль</a></li>
+                <li><a href="{% url 'profile_settings' %}">Настройки профиля</a></li>
+                <li><a href="{% url 'add_game' %}">Добавить игру</a></li>
+                <!-- Добавьте другие ссылки на основные разделы вашего приложения -->
+            </ul>
+        </div>
+
+        <!-- Основной контент профиля справа -->
+        <div>
+            <h1>User Profile</h1>
+            <div style="display: flex;">
+                <div style="margin-right: 20px;">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" alt="Avatar" style="width: 128px; height: 128px;">
+                    {% else %}
+                        <p>No avatar uploaded</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <p><strong>Nickname:</strong> {{ profile.nickname }}</p>
+                    <p><strong>Steam ID:</strong> {{ profile.steamid }}</p>
+                    <p><strong>Steam URL:</strong> <a href="{{ profile.steam_url }}">{{ profile.steam_url }}</a></p>
+                </div>
+            </div>
+
+            <!-- Дополнительный контент профиля -->
+            <hr>
+            <h2 class="game-name">Games:</h2>
+            <ul>
+                {% for game in games %}
+                    <li class="game-item">
+                        <img class="game-icon" src="{{ game.icon.url }}" alt="Game Icon">
+                        <div class="game-details">
+                            <p class="game-name">{{ game.title }}</p>
+                            <p class="game-id"><strong>Game id:</strong> {{ game.game_id }}</p>
+                            <form method="post" action="{% url 'add_or_remove_game' game.id %}">
+                                {% csrf_token %}
+                                {% if game in profile.games.all %}
+                                    <button type="submit" class="games-button">Remove from Profile</button>
+                                {% else %}
+                                    <button type="submit" class="games-button">Add to Profile</button>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
