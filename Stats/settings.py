@@ -7,6 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 Steam_key = os.getenv("STEAM_API_KEY")
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_SECRET_KEY = os.getenv('GOOGLE_SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -21,11 +23,17 @@ SITE_ID = 1
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
 
 
 
@@ -37,14 +45,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'games',
     
-
+    'django.contrib.sites', 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.steam',
     'allauth.socialaccount.providers.openid',
+    'allauth.socialaccount.providers.google',
+
 ]
 
 MIDDLEWARE = [
@@ -60,10 +71,21 @@ MIDDLEWARE = [
 
 SOCIALACCOUNT_PROVIDERS = {
     'steam': {
-        'CLIENT_ID': Steam_key,
-        'SECRET': Steam_key,
+        'APP': {
+            'CLIENT_ID': Steam_key,
+            'SECRET': Steam_key,
+        }
+    },
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+            }
+        }
     }
-}
 
 
 ROOT_URLCONF = 'Stats.urls'
@@ -71,7 +93,10 @@ ROOT_URLCONF = 'Stats.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'allauth'),  # Путь к шаблонам allauth
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -159,4 +184,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #ALLAUTH
-
+ACCOUNT_LOGIN_TEMPLATE = 'templates/allauth/account/login.html'
+ACCOUNT_SIGNUP_URL = 'create_user'
+# ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_CONFIRMATION_HTML = 'templates/email_temp/acc.activation_email.html'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/accounts/login/'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3

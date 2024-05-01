@@ -193,8 +193,8 @@
                 </div>
                 </div>
             {% else %}
-                <a href="{% url 'login' %}?next={{ request.path }}">
-                <button style="float:right; height: 50px; width: 120px; background-color:rgb(34, 79, 153); border-radius: 20px; border-color: transparent; margin-top: 20px; margin-left: 5px; margin-right: 15px; font-size: medium; color:white;">Войти</button>
+                <a href="{% url 'account_login' %}?next={{ request.path }}">
+                <button style="float:right; height: 50px; width: 120px; background-color:rgb(34, 79, 153); border-radius: 20px; border-color: transparent; margin-top: 28px; margin-left: 5px; margin-right: 15px; font-size: medium; color:white;">Войти</button>
                 </a>
             {% endif %}
     </div>

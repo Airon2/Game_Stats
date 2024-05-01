@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm
+# from .forms import SignUpForm
 from steam import Steam
 import os
 from .models import Game,Profile
@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 from django.contrib import messages
+from allauth.account.forms import LoginForm
+from allauth.account.forms import SignupForm
+from django.contrib.auth import get_user_model
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -20,14 +23,24 @@ from django.shortcuts import render
 from steam import Steam
 from .models import Game, Profile
 import os
+from allauth.account.views import LoginView
+from django.http import HttpResponse
 
+class CustomLoginView(LoginView):
+    template_name = 'allauth/account/login.html'
+    
+@login_required
 def game_detail(request, game_title):
     # Получаем информацию о игре из базы данных
     game = get_object_or_404(Game, title=game_title)
     
-    # Получаем steamid пользователя из профиля
-    # profile = Profile.objects.first()  # Предполагая, что у вас только один профиль. Измените логику, если это не так.
-    profile = Profile.objects.get(user=request.user)
+    # Проверяем, что у пользователя есть профиль
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        messages.error(request, 'Сначала создайте профиль, чтобы увидеть информацию о времени игры.')
+        return redirect('login')  # Перенаправляем на страницу создания профиля или настройки профиля
+    
     steam_id = profile.steamid
     
     # Получаем статистику игры из Steam API
@@ -77,16 +90,39 @@ def profile_detail(request):
     }
     return render(request, 'profile/profile_base.html', context)
 
-def signup_view(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')  # Перенаправление на страницу входа после успешной регистрации
-    else:
-        form = SignUpForm()
-    return render(request, 'registration/create_user.html', {'form': form})
+User = get_user_model()
 
+# def signup_view(request):
+#     if request.method == 'POST':
+#         form = SignupForm(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             if User.objects.filter(email=email).exists():
+#                 # Адрес электронной почты уже используется
+#                 return HttpResponse("This email address is already in use.")
+#             user = form.save(request)
+#             user.is_active = False  # Отключить активацию по умолчанию
+#             user.save()
+#             return redirect('account_login')  # Перенаправление на страницу входа после успешной регистрации
+#     else:
+#         form = SignupForm()
+#     return render(request, 'registration/create_user.html', {'form': form})
+from allauth.account.views import SignupView
+
+class CustomSignupView(SignupView):
+    template_name = 'registration/create_user.html'  
+
+def login_view(request):
+    if request.method == 'POST':
+        # Обработка отправленной формы
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            # Действия при успешной авторизации
+            return redirect('home')
+    else:
+        form = LoginForm()
+
+    return render(request, 'templates/allauth/account/login.html', {'form': form})
 from .forms import GameForm
 
 def add_game_view(request):
@@ -131,20 +167,22 @@ def profile_settings(request):
     return render(request, 'profile/settings.html', context)
 
 @login_required
-def add_or_remove_game(request):
+def add_or_remove_game(request, game_id):
     if request.method == 'POST':
-        game_id = request.POST.get('game_id')
-        if game_id:
-            profile = Profile.objects.get(user=request.user)
-            game = get_object_or_404(Game, pk=game_id)
+        # Получаем профиль пользователя
+        profile = get_object_or_404(Profile, user=request.user)
+        
+        # Получаем игру по game_id
+        game = get_object_or_404(Game, pk=game_id)
 
-            if game in profile.games.all():
-                profile.games.remove(game)
-                messages.success(request, f'Игра "{game.title}" удалена из профиля.')
-            else:
-                profile.games.add(game)
-                messages.success(request, f'Игра "{game.title}" добавлена в профиль.')
+        # Проверяем, добавлена ли игра в профиль пользователя
+        if game in profile.games.all():
+            profile.games.remove(game)
+            messages.success(request, f'Игра "{game.title}" удалена из профиля.')
+        else:
+            profile.games.add(game)
+            messages.success(request, f'Игра "{game.title}" добавлена в профиль.')
 
-            return redirect('profile_settings')
+        return redirect('profile_settings')
 
-    return redirect('profile_settings')  # Если метод запроса не POST или game_id не указан, перенаправляем на страницу настроек профиля
+    return redirect('profile_settings')  # Если метод запроса не POST, перенаправляем на страницу настроек профиля

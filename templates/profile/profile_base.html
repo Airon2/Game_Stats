@@ -47,7 +47,7 @@
     </style>
 </head>
 <body>
-    <h1>User Profile</h1>
+    <h1>Профиль</h1>
     <div style="display: flex;">
         <div style="margin-right: 20px;">
             {% if profile.avatar %}
@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    <h2 class="game-name">Games:</h2>
+    <h2 class="game-name">Игры:</h2>
     <ul>
         {% for game in games %}
         <li class="game-item">
@@ -75,7 +75,7 @@
         </li>
         {% endfor %}
         <li class="game-item">
-            <a href="{% url 'add_game' %}" class="game-name">+Add Game</a>
+            <a href="{% url 'add_game' %}" class="game-name">+Добавить игру</a>
         </li>
     </ul>
 </body>

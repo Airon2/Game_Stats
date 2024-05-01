@@ -96,7 +96,7 @@
 
         <!-- Основной контент профиля справа -->
         <div>
-            <h1>User Profile</h1>
+            <h1>Настройки</h1>
             <div style="display: flex;">
                 <div style="margin-right: 20px;">
                     {% if profile.avatar %}
@@ -114,7 +114,7 @@
 
             <!-- Дополнительный контент профиля -->
             <hr>
-            <h2 class="game-name">Games:</h2>
+            <h2 class="game-name">Игры:</h2>
             <ul>
                 {% for game in games %}
                     <li class="game-item">
@@ -125,7 +125,7 @@
                             <form method="post" action="{% url 'add_or_remove_game' game.id %}">
                                 {% csrf_token %}
                                 {% if game in profile.games.all %}
-                                    <button type="submit" class="games-button">Remove from Profile</button>
+                                    <button type="submit" class="games-button">Убрать из профиля</button>
                                 {% else %}
                                     <button type="submit" class="games-button">Add to Profile</button>
                                 {% endif %}

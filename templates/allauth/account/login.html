@@ -2,7 +2,7 @@
 {% load socialaccount %}
 
 {% block content %}
-<div style="background-color: #222; color: #fff; padding: 20px; border-radius: 8px; margin-top: 21px;">
+<div style="background-color: #222; color: #fff; padding: 20px; border-radius: 8px;">
     <h2 style="text-align: center;">Вход allauth</h2>
     <form method="post" enctype="multipart/form-data" style="margin-top: 20px;">
         {% csrf_token %}
@@ -17,6 +17,7 @@
         <button type="submit" style="background-color: #ffa500; color: #fff; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">Войти</button>
     </form>
     <p style="margin-top: 20px; text-align: center;">Нет аккаунта? <a href="{% url 'create_user' %}" style="color: #ffa500;">Зарегистрироваться</a></p>
+    <p>Or</p>
     <a href="{% provider_login_url 'google' %}" style="display: block; margin-top: 20px; text-align: center; background-color: #171a21; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Войти через Google</a>
     <a href="{% provider_login_url 'steam' %}" style="display: block; margin-top: 20px; text-align: center; background-color: #171a21; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Войти через Steam</a>
 </div>

@@ -3,8 +3,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Game
 from .models import Profile
+from allauth.account.forms import SignupForm
 
-class SignUpForm(UserCreationForm):
+
+class SignUpForm(SignupForm):
     email = forms.EmailField()
 
     class Meta:
