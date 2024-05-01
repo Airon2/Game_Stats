@@ -145,8 +145,12 @@ def add_game_view(request):
 
 @login_required
 def profile_settings(request):
-    profile = Profile.objects.get(user=request.user)
-    games = profile.games.all()  # Получаем список игр, связанных с профилем пользователя
+    profile = get_object_or_404(Profile, user=request.user)
+    games = profile.games.all()  # Получаем список игр, связанных с профилем пользователя
+
+    # Получаем список всех игр, которые не добавлены в профиль пользователя
+    available_games = Game.objects.exclude(pk__in=games.values_list('pk', flat=True))
+
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
         if profile_form.is_valid():
@@ -155,7 +159,6 @@ def profile_settings(request):
             return redirect('profile_settings')
         else:
             messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
-
     else:
         profile_form = ProfileForm(instance=profile)
 
@@ -163,19 +166,16 @@ def profile_settings(request):
         'profile': profile,
         'profile_form': profile_form,
         'games': games,
+        'available_games': available_games  # Добавляем список доступных игр в контекст
     }
     return render(request, 'profile/settings.html', context)
 
 @login_required
 def add_or_remove_game(request, game_id):
-    if request.method == 'POST':
-        # Получаем профиль пользователя
-        profile = get_object_or_404(Profile, user=request.user)
-        
-        # Получаем игру по game_id
-        game = get_object_or_404(Game, pk=game_id)
+    profile = get_object_or_404(Profile, user=request.user)
+    game = get_object_or_404(Game, pk=game_id)
 
-        # Проверяем, добавлена ли игра в профиль пользователя
+    if request.method == 'POST':
         if game in profile.games.all():
             profile.games.remove(game)
             messages.success(request, f'Игра "{game.title}" удалена из профиля.')
@@ -183,6 +183,7 @@ def add_or_remove_game(request, game_id):
             profile.games.add(game)
             messages.success(request, f'Игра "{game.title}" добавлена в профиль.')
 
-        return redirect('profile_settings')
+        return redirect('profile_settings')  # Перенаправляем пользователя на страницу настроек профиля
 
-    return redirect('profile_settings')  # Если метод запроса не POST, перенаправляем на страницу настроек профиля
+    # Если это не POST-запрос или что-то еще, просто перенаправляем обратно на страницу профиля
+    return redirect('profile_settings')

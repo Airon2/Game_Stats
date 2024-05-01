@@ -79,7 +79,7 @@
         min-width: 160px;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         z-index: 1;
-        margin-top: 120px;
+        margin-top: 170px;
     }
     
     .dropdown-content a {
@@ -104,6 +104,7 @@
         border: none;
         cursor: pointer;
         padding: 10px;
+        margin-top: -30px; /* Отступ сверху кнопки */
     }
     
     .logout-btn:hover {
@@ -185,6 +186,7 @@
                     <span style="color: white;">{{ user.profile.nickname }}</span></a>
                 <div class="dropdown-content">
                     <a href="{% url 'profile_settings' %}">Настройки</a>
+                    <a href="{% url 'profile_detail' %}">Профиль</a>
                     <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
