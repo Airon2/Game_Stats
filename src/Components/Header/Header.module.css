@@ -1,0 +1,43 @@
+.Header_wrapper{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-around;
+}
+.navigator_text{
+    color: #fff;
+    position: relative; 
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.navigator_text::after {
+    content: ''; /* Создаем пустой контент, который будет линией */
+    position: absolute; /* Позиционируем линию абсолютно относительно текста */
+    left: 0; /* Выравниваем линию по левому краю текста */
+    bottom: -2px; /* Располагаем линию под текстом */
+    width: 0; /* Устанавливаем ширину линии 0 по умолчанию */
+    height: 4px; /* Задаем высоту линии */
+    background-color: yellow; /* Задаем цвет линии */
+    transition: width 0.3s; /* Добавляем анимацию при изменении ширины линии */
+}
+
+/* Стили для линии при наведении */
+.navigator_text:hover::after {
+    width: 100%; /* Увеличиваем ширину линии до 100% при наведении */
+}
+
+.Header_input{
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+}
+.Header_form{
+    display: flex;
+    justify-content: space-around;
+    width: 50%;
+}
+a{
+    text-decoration: none;
+}

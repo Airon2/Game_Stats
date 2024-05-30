@@ -1,0 +1,123 @@
+.registration_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 850px;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3));
+    z-index: 10;
+}
+.registration{ 
+    width: 100%;
+    height: 850px;
+    position: absolute;
+    z-index: -1;
+}
+.register_container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px;
+    width: 50%;
+    background-color: rgba(243, 243, 243, 0.2);
+    border: 3px solid white;
+}
+.login_container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px;
+    width: 50%;
+    height: 65%;
+    background-color: rgba(243, 243, 243, 0.2);
+    border: 3px solid white;
+}
+.registration_description{
+    width: 90%;
+    height: 30%;
+}
+.login_description{
+    width: 90%;
+    height: 30%;
+    margin: 10px;
+}
+.registration_coffee_shop_name{
+    text-align: center;
+    color: #fff;
+    margin: 35px;
+}
+.login_coffee_shop_name{
+    text-align: center;
+    color: #fff;
+    margin-top: 20px;
+}
+.registration_information{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 70%;
+    position: relative;
+}
+.registration_input{
+    border-radius: 17px;
+    border: none;
+    margin: 15px;
+    height: 45px;
+    position: relative;
+    text-align: center;
+}
+
+.registration_input::before {
+    content: attr(placeholder);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px; 
+  }
+
+.registration_text{
+    color: #fff;
+    text-align: center; 
+    font-size: 18px;  
+}
+.registration_btn{
+    font-size: 16px;
+    margin: 20px; 
+    height: 45px; 
+    border-radius: 15px;
+    border: 3px solid orange; 
+    background-color: yellow;
+}
+span{
+    position: absolute;
+    bottom: 223px;
+    right: 40px;
+}
+
+.login_span{
+    position: absolute;
+    top: 108px;
+}
+.switch{
+    color: #fff;
+    font-size: 18px;
+}
+.registration_icon{
+    width: 30px;
+    height: 35px;
+}
+.registration2{
+    display: flex;
+    justify-content: space-between;
+}
+.registration2_wrapper{
+    margin: 20px;
+    width: 35%;
+    display: flex;
+    height: 50px;
+    border: none;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #ffb700;
+}

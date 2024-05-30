@@ -1,0 +1,15 @@
+.Footer_wrapper{
+    margin-top: 20px;
+    height: 150px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #2b2d42;
+}
+.footer_icon{
+    width: 45px;
+    height: 45px;
+}
+.Footer_Text{
+    color: #fff;
+}

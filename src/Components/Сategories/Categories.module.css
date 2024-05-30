@@ -1,0 +1,134 @@
+/* GenreDropdown.css */
+
+.genre_dropdown {
+    position: relative;
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+.all_games {
+    cursor: pointer;
+    width: 200px;
+    height: 50px;
+    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #fff;
+}
+
+.genre_menu {
+    position: absolute;
+    top: 100%; /* Поместите меню под кнопку */
+    left: 0;
+    width: 200px;
+    background-color: #343a40;
+    border: 1px solid #ccc;
+    border-top: none;
+    padding: 10px 0;
+    color: #fff;
+}
+ul{
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+}
+.genre-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.genre-menu ul li {
+    cursor:pointer;
+}
+
+.genre-menu ul li:hover {
+    background-color: #343a40;
+}
+
+.Sample_Game_icon{
+    height: 300px;
+    width: 180px;
+    border-radius: 10px;
+}
+.Sample_Game_btn{
+    height: 40px;
+    border-radius: 15px;
+    border: none;
+}
+.SampleGames_wrapper{
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+.Sample_Game_text{
+    color: #fff;
+    text-align: center;
+}
+/*////////////////////////////////////////////////////////////////////*/
+.SampleGamesLider{
+    width: 100%;
+    min-height: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.SampleGamesLider_wrapper{
+    width: 80%;
+    border: none;
+    background-color: black;
+    border-radius: 10px;
+   
+}
+.Toplist{
+    display: flex;
+    color: #fff;
+}
+.div1{
+    width: 10%;
+    padding: 10px;
+}
+.div2{
+    display: flex;
+    align-items: center;
+    width: 40%;
+    padding: 10px;
+}
+.div3{
+    width: 20%; 
+    padding: 10px;  
+}
+.div4{
+    width: 20%;
+    padding: 10px;
+}
+.div5{
+    width: 10%;
+    padding: 10px;
+}
+.SampleGamesLider_img{
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+}
+.Categories{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+.Categories_wrapper{
+    width: 85%;
+}
+.Games{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}

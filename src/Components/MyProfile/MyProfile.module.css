@@ -1,0 +1,90 @@
+.MyProfile{
+    width: 100%;
+    height: 900px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.MyProfile_wrapper{
+    width: 90%;
+    height: 90%;
+
+}
+.MyProfile_img{
+    width: 400px;
+}
+.information{
+    display: flex;
+    justify-content: space-around;
+}
+.MyProfile_text{
+    color: #fff;
+    font-size: 35px;
+}
+.MyProfile_img{
+    width: 120px;
+    border-radius: 10px;
+}
+.Profile_game_text{
+    color: #fff;
+    font-size: 18px;
+}
+.MyProfile_img1{
+    width: 300px;
+}
+.MyProfile_btn{
+    width: 250px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background-color: yellow;
+}
+.Games_sample{
+    width: 250px;
+    height: 170px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.Games_sample_wrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.profile_games_wrapper{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+/*/////////////////////////////////////////////////////////////////////////////*/
+
+.SampleMyprofileGameStatistic{
+    width: 100%;
+    height: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.SampleMyprofileGameStatistic_wrapper{
+    width: 80%;
+    height: 400px;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+}
+.Mystatistic_text{
+    margin: 20px;
+    color: white;
+}
+.vertical_hr {
+    width: 1px; /* Устанавливаем ширину линии */
+    height: 100%; /* Устанавливаем высоту линии */
+    background-color: black; /* Цвет линии */
+    border: none; /* Убираем границу */
+}
+.MyStatistic{
+    width: 100%;
+}
