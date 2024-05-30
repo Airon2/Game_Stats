@@ -11,7 +11,9 @@ GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_SECRET_KEY = os.getenv('GOOGLE_SECRET_KEY')
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['2fa0-147-30-13-15.ngrok-free.app', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://127.0.0.1', 'http://[::1]', 'https://2fa0-147-30-13-15.ngrok-free.app']
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -55,7 +57,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.steam',
     'allauth.socialaccount.providers.openid',
     'allauth.socialaccount.providers.google',
-
+    
+    'rest_framework',
+    'corsheaders',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +74,24 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000", # URL вашего Node.js фронтенда
+    "http://2fa0-147-30-13-15.ngrok-free.app", 
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -189,7 +214,8 @@ ACCOUNT_SIGNUP_URL = 'create_user'
 # ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'False'
+# 'mandatory' 
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_CONFIRMATION_HTML = 'templates/email_temp/acc.activation_email.html'

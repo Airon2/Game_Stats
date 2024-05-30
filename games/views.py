@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-# from .forms import SignUpForm
 from steam import Steam
 import os
 from .models import Game,Profile
@@ -11,6 +10,19 @@ from allauth.account.forms import LoginForm
 from allauth.account.forms import SignupForm
 from django.contrib.auth import get_user_model
 from dotenv import load_dotenv
+from rest_framework import viewsets
+from .models import Profile, Game
+from .serializers import ProfileSerializer, GameSerializer, UserSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import viewsets, permissions
+from django.shortcuts import render
+from steam import Steam
+from .models import Game, Profile
+import os
+from allauth.account.views import LoginView
+from django.http import HttpResponse
 load_dotenv()
 
 
@@ -18,13 +30,6 @@ def home(request):
     games = Game.objects.all()
     return render(request, 'base.html', {'games': games})
 
-
-from django.shortcuts import render
-from steam import Steam
-from .models import Game, Profile
-import os
-from allauth.account.views import LoginView
-from django.http import HttpResponse
 
 class CustomLoginView(LoginView):
     template_name = 'allauth/account/login.html'
@@ -92,21 +97,6 @@ def profile_detail(request):
 
 User = get_user_model()
 
-# def signup_view(request):
-#     if request.method == 'POST':
-#         form = SignupForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             if User.objects.filter(email=email).exists():
-#                 # Адрес электронной почты уже используется
-#                 return HttpResponse("This email address is already in use.")
-#             user = form.save(request)
-#             user.is_active = False  # Отключить активацию по умолчанию
-#             user.save()
-#             return redirect('account_login')  # Перенаправление на страницу входа после успешной регистрации
-#     else:
-#         form = SignupForm()
-#     return render(request, 'registration/create_user.html', {'form': form})
 from allauth.account.views import SignupView
 
 class CustomSignupView(SignupView):
@@ -187,3 +177,45 @@ def add_or_remove_game(request, game_id):
 
     # Если это не POST-запрос или что-то еще, просто перенаправляем обратно на страницу профиля
     return redirect('profile_settings')
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]  # Добавляем разрешение IsAuthenticated
+
+class GameViewSet(viewsets.ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    
+class ProfileList(APIView):
+    permission_classes = [IsAuthenticated]  # Устанавливаем разрешение на аутентифицированных пользователей
+
+    def get(self, request):
+        profiles = Profile.objects.all()
+        serializer = ProfileSerializer(profiles, many=True)
+        return Response(serializer.data)
+    
+from django.http import JsonResponse
+
+def profile_detail_api(request):
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+        games = list(profile.games.all().values())  # Получаем список игр, связанных с профилем пользователя
+        games_with_details = []
+        for game in games:
+            game_detail = {
+                'game_id': game['id'],
+                'title': game['title'],
+                'icon': game['icon'].url if game['icon'] else None,
+                # Другие данные игры, которые вам нужны
+            }
+            games_with_details.append(game_detail)
+        data = {
+            'username': profile.user.username,
+            'steamid': profile.steamid,
+            'steam_url': profile.steam_url,
+            'games': games_with_details,
+        }
+        return JsonResponse(data)
+    else:
+        return JsonResponse({'error': 'User is not authenticated'}, status=401)
